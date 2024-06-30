@@ -1,0 +1,492 @@
+:root {
+    --main-bg-color: #000000fe;
+    --secondary-bg-color: #111111fe;
+    --tertiary-bg-color: #121212fe;
+    --quaternary-bg-color: #010111fe;
+    --border-back-color: #00dbb3;
+    --border-back-gradient-color: #33fdd6;
+    --text-color: #eeeeeebb;
+    --highlight-color: #f2f2f2cc;
+    --font-main: "Noto Sans Display", sans-serif;
+    --font-alt: "Noto Sans Linear A", sans-serif;
+    --transition-duration: 0.3s;
+    --border-width: 5px;
+    --correct-color: #32CD32;
+    --incorrect-color: #FF4500;
+    --pulse-duration: 0.25s;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--main-bg-color);
+    background: radial-gradient(var(--main-bg-color), var(--secondary-bg-color), var(--tertiary-bg-color), var(--quaternary-bg-color), var(--main-bg-color));
+    background-attachment: fixed;
+    overflow: hidden;
+    user-select: none;
+}
+
+.borderBack {
+    width: calc(100vw - 10px);
+    height: calc(100vh - 10px);
+    margin: 5px;
+    background: radial-gradient(var(--border-back-color) 95%, var(--border-back-gradient-color) 97%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border: var(--border-width) solid var(--border-back-color);
+    box-sizing: border-box;
+}
+
+.borderBack::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(-60deg, #222222dd, #2f2f2fcc, #333333cc);
+    animation: hueRotate 60s linear infinite;
+    z-index: 1;
+    box-sizing: border-box;
+}
+
+.borderBack::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to left, transparent 10%, #00000011 40%, #99999988 45%, #9a9a9a99 50%, transparent 55%);
+    background-repeat: no-repeat;
+    background-size: 200%;
+    left: -300%;
+    animation: wipeAppear 10s linear infinite 5s;
+    z-index: 999991000;
+    pointer-events: none;
+}
+
+@keyframes hueRotate {
+    from {
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        filter: hue-rotate(360deg);
+    }
+}
+
+@keyframes wipeAppear {
+    from {
+        left: -300%;
+    }
+
+    to {
+        left: 300%;
+    }
+}
+
+.timerBar {
+    position: absolute;
+    bottom: calc(-1 * var(--border-width));
+    left: 0;
+    width: 95%;
+    height: var(--border-width);
+    background: linear-gradient(to right, #aa24c255, #aa24c2ff);
+    border-radius: 5px;
+    z-index: 20;
+    animation: timerBarTime linear 10s infinite;
+}
+
+@keyframes timerBarTime {
+    from {
+        width: 0%;
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        width: 100%;
+        filter: hue-rotate(360deg);
+    }
+}
+
+.header {
+    display: flex;
+    width: 100%;
+    height: 10%;
+    justify-content: space-around;
+    align-items: center;
+    position: absolute;
+    top: 1vh;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.startButton {
+    width: calc(25vw + 5vh);
+    height: calc(7vh + 7vw);
+    padding: 1%;
+    border-radius: 25px;
+    font-size: 6vh;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-main);
+    z-index: 599;
+}
+
+.startButton::before {
+    content: "";
+    position: absolute;
+    width: calc(25vw + 10vh);
+    height: calc(3.5vh + 4vw);
+    border-radius: 25px;
+    background: linear-gradient(-65deg, #1e070777, #101210bb, #042010bb, #11115377);
+    animation: hueRotate 6s linear infinite;
+}
+
+.startText {
+    background-image: linear-gradient(-35deg, #00dbb3, #2e6173, #550055, #b11867, #df9744, #03b93b, #00dbb3);
+    background-size: 1000%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    text-shadow: -2px -4px 8px #ffffff21;
+    animation: horizontalGradient 600s linear infinite, textRotate 6s linear infinite;
+}
+
+@keyframes textRotate {
+    from {
+        transform: rotate(0deg) translateX(2px) rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg) translateX(2px) rotate(-360deg);
+    }
+}
+
+@keyframes horizontalGradient {
+    from {
+        background-position: 500% 0%;
+        filter: hue-rotate(0deg);
+    }
+
+    to {
+        background-position: -500% 0%;
+        filter: hue-rotate(0deg);
+    }
+}
+
+.gameGrid {
+    z-index: 5;
+    width: 90%;
+    height: calc(100% - (7vh + 7vw - 2.5vh - 2.5vw));
+    display: grid;
+    grid-template-rows: repeat(var(--grid-rows, 1), 1fr);
+    grid-template-columns: repeat(var(--grid-cols, 1), 1fr);
+    gap: 2px;
+    position: absolute;
+    top: calc(5vh + 5vw);
+    left: 50%;
+    padding-left: 2vw;
+    padding-right: 2vw;
+    padding-top: -2vh;
+    padding-bottom: 5vh;
+    transform: translateX(-50%);
+    box-sizing: border-box;
+}
+
+.gridCell {
+    background: #aaaaaa05;
+    border-radius: 10px;
+    border: 1px #11111111 solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(1.5vw + 1.5vh);
+    line-height: 5vh;
+    text-align: center;
+    transform: scale(0.95);
+    font-family: var(--font-alt);
+    transition: transform var(--transition-duration);
+}
+
+.gridCell:hover {
+    background: #bbbbbb99;
+    transform: scale(1.025);
+    cursor: pointer;
+}
+
+.gridCell:active {
+    transform: scale(0.9);
+}
+
+.gridChar {
+    height: 70%;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    user-select: none;
+    text-shadow: 2px 2px 2px #111111ee;
+    position: relative;
+}
+
+@keyframes wiggle {
+
+    0%,
+    25%,
+    62.5%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(-20deg);
+    }
+
+    37.5% {
+        transform: rotate(20deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    25%,
+    62.5%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(0.9);
+    }
+
+    37.5% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes vert {
+
+    0%,
+    25%,
+    62.5%,
+    100% {
+        top: 0%;
+    }
+
+    50% {
+        top: -15%;
+    }
+
+    37.5% {
+        top: 15%;
+    }
+}
+
+@keyframes hori {
+
+    0%,
+    25%,
+    62.5%,
+    100% {
+        right: 0%;
+    }
+
+    50% {
+        right: -15%;
+    }
+
+    37.5% {
+        right: 15%;
+    }
+}
+
+.correct {
+    background: var(--correct-color);
+    pointer-events: none;
+    animation: scorePulseUp var(--pulse-duration) ease-in-out;
+}
+
+.incorrect {
+    background: var(--incorrect-color);
+    pointer-events: none;
+    animation: scorePulseDown var(--pulse-duration) ease-in-out;
+}
+
+.answerNumberHolder {
+    font-size: 2.5vh;
+    color: white;
+    opacity: 0.5;
+    z-index: 4;
+    background: linear-gradient(#11111144, #00000066);
+    border-radius: 25px;
+    text-align: center;
+    font-family: var(--font-main);
+    padding: 1vh;
+    margin-left: 2vw;
+    animation: fadeIn 10s ease infinite 10s;
+}
+
+@keyframes fadeIn {
+
+    0%,
+    30% {
+        opacity: 0.5;
+    }
+
+    65%,
+    100% {
+        opacity: 1;
+    }
+}
+
+.scoreHolder {
+    font-size: 4.5vh;
+    color: white;
+    z-index: 4;
+    text-align: center;
+    font-family: var(--font-main);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.score {
+    margin-top: 10%;
+    width: calc(8vw + 6vh);
+    height: 20%;
+    border-radius: 25px;
+    background: linear-gradient(#11111144, #00000066);
+}
+
+.unlockedPercentage {
+    font-size: 30%;
+}
+
+@media (max-width: 768px) {
+    .startButton {
+        font-size: 4vh;
+    }
+
+    .gridCell {
+        font-size: calc(1.5vw + 1.5vh);
+    }
+
+    .answerNumberHolder,
+    .scoreHolder {
+        font-size: 2vh;
+        padding: 0.5vh;
+    }
+
+    .unlockedPercentage {
+        margin-top: 3px;
+    }
+
+    .gameGrid {
+        grid-template-rows: repeat(var(--grid-rows, 10), 1fr);
+        grid-template-columns: repeat(var(--grid-cols, 12), 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .startButton {
+        font-size: 3vh;
+    }
+
+    .gridCell {
+        font-size: calc(1.5vw + 1.5vh);
+    }
+
+    .answerNumberHolder,
+    .scoreHolder {
+        font-size: 1.5vh;
+        padding: 0.5vh;
+    }
+
+    .unlockedPercentage {
+        margin-top: 2px;
+    }
+
+    .gameGrid {
+        grid-template-rows: repeat(var(--grid-rows, 12), 1fr);
+        grid-template-columns: repeat(var(--grid-cols, 10), 1fr);
+    }
+}
+
+@keyframes scorePulseUp {
+    0% {
+        transform: scale(1);
+        color: white;
+    }
+
+    20% {
+        transform: scale(1.4) scaleY(1);
+        color: var(--correct-color);
+    }
+
+    30% {
+        transform: scale(1.5) scaleY(0.8);
+    }
+
+    50% {
+        transform: scale(1.3) scaleY(0.6);
+    }
+
+    90% {
+        transform: scale(0.9) scaleY(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        color: white;
+    }
+}
+
+@keyframes scorePulseDown {
+    0% {
+        transform: scale(1);
+        color: white;
+    }
+
+    20% {
+        transform: scale(1) scaleY(1.4);
+        color: var(--incorrect-color);
+    }
+
+    30% {
+        transform: scale(1.5) scaleY(0.8);
+    }
+
+    50% {
+        transform: scale(0.6) scaleY(1.3);
+    }
+
+    90% {
+        transform: scale(0.9) scaleY(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+        color: white;
+    }
+}
+
+.pulse-up {
+    animation: scorePulseUp var(--pulse-duration) ease-in-out 0.2s;
+}
+
+.pulse-down {
+    animation: scorePulseDown var(--pulse-duration) ease-in-out 0.2s;
+}
