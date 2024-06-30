@@ -5,8 +5,8 @@
     --quaternary-bg-color: #010111fe;
     --border-back-color: #00dbb3;
     --border-back-gradient-color: #33fdd6;
-    --text-color: #eeeeeebb;
-    --highlight-color: #f2f2f2cc;
+    --text-color: #eeeeeece;
+    --highlight-color: #f2f2f2f0;
     --font-main: "Noto Sans Display", sans-serif;
     --font-alt: "Noto Sans Linear A", sans-serif;
     --transition-duration: 0.3s;
@@ -14,6 +14,7 @@
     --correct-color: #32CD32;
     --incorrect-color: #FF4500;
     --pulse-duration: 0.25s;
+    --round-duration: 10s;
 }
 
 html,
@@ -62,13 +63,13 @@ body {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(to left, transparent 10%, #00000011 40%, #99999988 45%, #9a9a9a99 50%, transparent 55%);
+    background-image: linear-gradient(to left, transparent 10%, #00000011 40%, #c2c2c288 45%, #e2e2e299 50%, transparent 55%);
     background-repeat: no-repeat;
     background-size: 200%;
     left: -300%;
-    animation: wipeAppear 10s linear infinite 5s;
     z-index: 999991000;
     pointer-events: none;
+    animation: wipeAppear var(--round-duration) linear infinite;
 }
 
 @keyframes hueRotate {
@@ -95,25 +96,15 @@ body {
     position: absolute;
     bottom: calc(-1 * var(--border-width));
     left: 0;
-    width: 95%;
+    width: 0%;
     height: var(--border-width);
     background: linear-gradient(to right, #aa24c255, #aa24c2ff);
     border-radius: 5px;
     z-index: 20;
-    animation: timerBarTime linear 10s infinite;
+    animation: hueRotate var(--round-duration) linear infinite;
+    transition: width var(--round-duration) linear;
 }
 
-@keyframes timerBarTime {
-    from {
-        width: 0%;
-        filter: hue-rotate(0deg);
-    }
-
-    to {
-        width: 100%;
-        filter: hue-rotate(360deg);
-    }
-}
 
 .header {
     display: flex;
@@ -335,7 +326,7 @@ body {
     font-family: var(--font-main);
     padding: 1vh;
     margin-left: 2vw;
-    animation: fadeIn 10s ease infinite 10s;
+    animation: fadeIn var(--round-duration) ease infinite;
 }
 
 @keyframes fadeIn {

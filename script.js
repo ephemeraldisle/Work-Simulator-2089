@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     initializeCharacterPool();
     createGrid(1, 1); // Start with a 1x1 grid
-    const timer = document.getElementById("timer");
-    timer.onanimationiteration = startGame;
-    startGame();  // Initial call to start the game
+    startRound();  // Initial call to start the game
 
     window.addEventListener('resize', adjustGrid);
     adjustGrid();  // Initial adjustment
@@ -22,6 +20,10 @@ let score = 0;
 let matchingPicks = 0;
 let correctPicks = 0;
 let rows, cols = 1;
+let roundDuration = 10;
+let roundInProgress = false;
+let timerID;
+let transitionEndPromise;
 
 const totalValidCharacters = calculateTotalValidCharacters();
 
@@ -33,7 +35,82 @@ function calculateTotalValidCharacters() {
     return total;
 }
 
-function startGame() {
+function waitForTransitionEnd(element) {
+    return new Promise((resolve) => {
+        function onTransitionEnd(event) {
+            if (event.target === element) {
+                element.removeEventListener('transitionend', onTransitionEnd);
+                resolve();
+            }
+        }
+        element.addEventListener('transitionend', onTransitionEnd);
+    });
+}
+
+
+async function startTimer(duration) {
+    roundInProgress = true;
+    const timerBar = document.getElementById('timer');
+    await resetTimerBar();
+    // resetTimer();
+    timerBar.style.transition = `width ${duration}s linear`;
+    adjustAnimationDuration(duration);
+    setTimeout(() => {
+        timerBar.style.width = '100%';
+    }, 50);
+
+    clearTimeout(timerID);
+    timerID = setTimeout(() => {
+        onTimeOut();
+    }, duration * 1000);
+}
+
+function onTimeOut() {
+    if (!roundInProgress) return;
+    roundInProgress = false
+    resetTimerBar();
+    startRound();
+}
+
+function resetTimerBar() {
+    const timerBar = document.getElementById('timer');
+    timerBar.style.transition = 'none';
+    timerBar.style.width = '0%'; 
+    return new Promise((resolve) => setTimeout(resolve, 50)); // Ensure a short delay before resolving
+
+}
+
+
+function adjustAnimationDuration(duration) {
+    document.documentElement.style.setProperty('--round-duration', `${duration}s`);
+}
+
+
+function endRoundEarly() {
+    clearTimeout(timerID);
+    adjustAnimationDuration(1); // Adjust to complete in 1 second
+
+    const timerBar = document.getElementById('timer');
+    timerBar.style.transition = `width 1s linear`;
+    setTimeout(() => { timerBar.style.width = '100%'; }, 10);
+
+    timerID = setTimeout(() => {
+        onTimeOut(); // Call the timeout handler after the short duration
+    }, 1000);
+}
+
+
+
+function getRemainingTime() {
+    const timerBar = document.getElementById('timer');
+    const computedStyle = window.getComputedStyle(timerBar);
+    const remainingDuration = parseFloat(computedStyle.transitionDuration);
+
+    return remainingDuration;
+}
+
+
+function startRound() {
     const specialCount = 4;
     const startButton = document.getElementById("start");
 
@@ -56,11 +133,23 @@ function startGame() {
 
     calculateGridSize(score);
     createGrid(rows, cols);
+    resetTimerBar();
+    startTimer(roundDuration);
     adjustGrid();
     initializeCells(specialOnes);
     updateAnswerNumber(correctPicks, matchingPicks);
+
+    resetBorderBackAnimation(roundDuration);
 }
 
+function resetBorderBackAnimation(duration) {
+    const borderBack = document.querySelector('.borderBack::after');
+    if (borderBack) {
+        borderBack.style.animation = 'none'; // Reset the animation
+        void borderBack.offsetWidth; // Trigger reflow to restart the animation
+        borderBack.style.animation = `wipeAppear ${duration}s linear infinite`;
+    }
+}
 
 function initializeCharacterPool() {
     VALID_RANGES.forEach(range => {
@@ -188,6 +277,7 @@ function updateAnswerNumber(count, total) {
     const remainingMatches = total - count;
     if (remainingMatches === 0) {
         answerNumber.textContent = "All matches found!";
+        endRoundEarly();
     } else if (remainingMatches === 1) {
         answerNumber.textContent = "1 match remaining.";
     } else {
