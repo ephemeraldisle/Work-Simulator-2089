@@ -58,7 +58,7 @@ body {
     box-sizing: border-box;
 }
 
-.borderBack::after {
+.swipeGradient {
     content: "";
     position: absolute;
     width: 100%;
@@ -69,7 +69,11 @@ body {
     left: -300%;
     z-index: 999991000;
     pointer-events: none;
-    animation: wipeAppear var(--round-duration) linear infinite;
+    transition: left 1s linear;
+}
+
+.swipeActivator {
+    animation: wipeAppear 1s linear infinite;
 }
 
 @keyframes hueRotate {
@@ -83,12 +87,12 @@ body {
 }
 
 @keyframes wipeAppear {
-    from {
-        left: -300%;
+    0% {
+        left: -100%;
     }
 
-    to {
-        left: 300%;
+    100% {
+        left: 0%;
     }
 }
 
