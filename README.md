@@ -9,3 +9,5 @@ Like most people in the world, have you ever found yourself thinking "being able
 If so, have I got the experience for you.
 
 It won't help you understand Linear A, but it might inadvertantly teach you its characters.
+
+Play the deployment on github pages, or build it yourself, or just marvel at my beautiful code.
