@@ -10,7 +10,6 @@ function randomIntFromInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
 function hexToRgbA(hex) {
     let c;
     if (/^#([A-Fa-f0-9]{3}){1,2}([A-Fa-f0-9]{2})?$/.test(hex)) {
@@ -31,10 +30,11 @@ function precomputeColors() {
     const BASE_FONT_COLOR_END = "#ddddddaa";
     const CHOSEN_FONT_COLOR_START = "#f2f2f2dd";
     const CHOSEN_FONT_COLOR_END = "#ffffffff";
+    const COLOR_STEPS = 341;
 
     const colors = [];
-    for (let i = 0; i <= 341; i++) {
-        const unlockPercentage = i / 341;
+    for (let i = 0; i <= COLOR_STEPS; i++) {
+        const unlockPercentage = i / COLOR_STEPS;
         const baseFontColor = interpolateColor(BASE_FONT_COLOR_START, BASE_FONT_COLOR_END, unlockPercentage);
         const chosenFontColor = interpolateColor(CHOSEN_FONT_COLOR_START, CHOSEN_FONT_COLOR_END, unlockPercentage);
         colors[i] = { baseFontColor, chosenFontColor };
@@ -48,7 +48,6 @@ function getPrecomputedColors(index) {
     return precomputedColors[index];
 }
 
-
 function interpolateColor(startColor, endColor, factor) {
     const start = hexToRgbA(startColor);
     const end = hexToRgbA(endColor);
@@ -61,7 +60,6 @@ function interpolateColor(startColor, endColor, factor) {
     });
     return `rgba(${result[0]}, ${result[1]}, ${result[2]}, ${result[3]})`;
 }
-
 
 function debounce(func, wait, immediate) {
     let timeout;
@@ -78,24 +76,21 @@ function debounce(func, wait, immediate) {
     };
 }
 
-
 function generateRandomBorders(cell) {
     cell.style.borderRadius = generateBlobbyBorderRadius();
 }
-
 
 function generateBlobbyBorderRadius(minPercent = 30, maxPercent = 70) {
     // Generate 8 random percentages for the 4 corners (horizontal and vertical for each)
     const radii = Array.from({ length: 8 }, () => 
       Math.floor(Math.random() * (maxPercent - minPercent + 1)) + minPercent
     );
-  
+
     // Construct the border-radius string
     const borderRadiusString = `
       ${radii[0]}% ${100 - radii[0]}% ${100 - radii[1]}% ${radii[1]}% / 
       ${radii[2]}% ${radii[3]}% ${100 - radii[3]}% ${100 - radii[2]}%
     `.replace(/\s+/g, ' ').trim();
-  
+
     return borderRadiusString;
-  }
-  
+}

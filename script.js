@@ -89,16 +89,26 @@ const Game = (() => {
     };
 
     document.addEventListener("DOMContentLoaded", () => {
+        const fullscreenButton = document.getElementById('fullscreenButton');
+    
+        fullscreenButton.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+        
         initializeGame();
 
         window.addEventListener('resize', debounce(adjustGrid, DEBOUNCE_TIME));
-
 
         timescaleSelect.addEventListener("change", (event) => {
             const newTimescale = parseFloat(event.target.value);
             updateTimeScale(newTimescale);
         });
-
 
         startGameButton.addEventListener("click", () => {
             document.getElementById("instructions").style.display = "none";
@@ -114,9 +124,15 @@ const Game = (() => {
             score = 0;
             updateScore(0);
             startRound();
-
         });
 
+        gameGrid.addEventListener('click', (event) => {
+            const target = event.target.closest('.gridCell.in-use');
+            if (target) {
+                const index = Array.from(gameGrid.children).indexOf(target);
+                gridClick(index, event);
+            }
+        });
     });
 
 
@@ -124,7 +140,6 @@ const Game = (() => {
         populateCharacterPool();
         createAllGridCells();
         characterDisplay.style.fontFamily = "Noto Sans Linear A";
-
     }
 
     function startRound() {
@@ -271,7 +286,6 @@ const Game = (() => {
     function checkVictory() {
         const percentage = (characterPool.length / totalValidCharacters) * 100;
         if (percentage >= 100) {
-
             fadeInOverlay();
             gameRunning = false;
             displayVictoryMessage();
@@ -286,7 +300,6 @@ const Game = (() => {
             <h1>Congratulations!</h1>
             <p>You've sorted all the data, made our company 43,000 credits, and earned yourself a fat paycheck of 100 credits!</p>
         `;
-
         document.querySelector('.instructions').style.display = "flex";
         document.getElementById('startButtonText').textContent = "Work another shift?"
     }
@@ -296,6 +309,7 @@ const Game = (() => {
         characterPool = [];
         availableCharacters = [];
     }
+
     // Utility Functions
     function calculateTotalValidCharacters() {
         return VALID_RANGES.reduce((total, range) => total + (range[1] - range[0] + 1), 0);
@@ -345,7 +359,6 @@ const Game = (() => {
     }
 
     function fadeOutOverlay() {
-
         if (!gameRunning) return;
         overlay.classList.add('fade-out');
         overlay.classList.remove('fade-in');
@@ -366,8 +379,6 @@ const Game = (() => {
         gameGrid.appendChild(fragment);
         addGridEventListeners();
     }
-
-
 
     function updateGridVisibility(rows, cols) {
         const totalCells = rows * cols;
@@ -442,7 +453,6 @@ const Game = (() => {
         });
     }
 
-
     function adjustCharacterPool(change) {
         if (change > 0 && availableCharacters.length > 0) {
             const addCount = Math.min(change, availableCharacters.length);
@@ -455,7 +465,6 @@ const Game = (() => {
         updateUnlockedPercentage();
     }
 
-
     function addGridEventListeners() {
         gameGrid.addEventListener('click', (event) => {
             const target = event.target.closest('.gridCell.in-use');
@@ -465,17 +474,18 @@ const Game = (() => {
             }
         });
     }
+
     const gridClick = (i, event) => {
         if (!gameRunning) return;
         const cells = document.querySelectorAll(".gridCell");
         if (cells[i].classList.contains("correct") || cells[i].classList.contains("incorrect")) {
             return;
         }
-    
+
         const isCorrect = cells[i].classList.contains("chosen");
         const x = event.clientX;
         const y = event.clientY;
-    
+
         if (isCorrect) {
             cells[i].classList.add("correct");
             correctPicks += 1;
@@ -486,9 +496,8 @@ const Game = (() => {
             incorrectPicks += 1;
             updateScore(-1);
         }
-    
-        createParticles(x, y, isCorrect);
 
+        createParticles(x, y, isCorrect);
     }
 
     function createParticles(x, y, isCorrect) {
@@ -496,16 +505,16 @@ const Game = (() => {
         const container = document.body;
         const baseColor = isCorrect ? getComputedStyle(document.documentElement).getPropertyValue('--correct-color') : getComputedStyle(document.documentElement).getPropertyValue('--incorrect-color');
         const fragment = document.createDocumentFragment();
-    
+
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
             particle.classList.add('particle-line');
-            
+
             const angle = Math.random() * 2 * Math.PI;
             const speed = (Math.random() - 0.5) * 6;
             const size = 20 + Math.random() * 3;
             const duration = 0.5 + Math.random() * 0.5;
-    
+
             particle.style.width = `${size}px`;
             particle.style.height = `${5 + Math.random() * 2}px`;
             particle.style.backgroundColor = baseColor;
@@ -514,7 +523,7 @@ const Game = (() => {
             particle.style.setProperty('--angle', `${angle}rad`);
             particle.style.filter = `hue-rotate(${randomIntFromInterval(0, 45)}deg)`;
             fragment.appendChild(particle);
-    
+
             requestAnimationFrame(() => {
                 particle.style.transform = `
                     translate(${Math.cos(angle) * speed * 75}px, ${Math.sin(angle) * speed * 75}px)
@@ -522,14 +531,13 @@ const Game = (() => {
                 `;
                 particle.style.transition = `transform ${duration}s ease-out`;
             });
-    
+
             particle.addEventListener('transitionend', () => {
                 particle.remove();
             });
         }
         container.appendChild(fragment);
     }
-    
 
     function updateHintText(count, total) {
         const remainingMatches = total - count;
@@ -566,7 +574,6 @@ const Game = (() => {
             roundInProgress = false;
         }
     }
-
 
     function getRandomFontSize() {
         const baseFontSize = BASE_FONT_SIZE_DIVISOR / Math.min(rows, cols);
@@ -617,7 +624,6 @@ const Game = (() => {
     function updateCSSVariables() {
         document.documentElement.style.setProperty('--timescale', timescale);
     }
-
 
     return {
         startRound,

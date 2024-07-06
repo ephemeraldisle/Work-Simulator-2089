@@ -1,55 +1,57 @@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Work Simulator 2089</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@100&family=Noto+Sans+Linear+A&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@100&family=Noto+Sans+Linear+A&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="utils.js"></script>
     <script src="script.js" defer></script>
 </head>
-
 <body>
-    <div class="borderBack">
-        <div class="header">
-            <div class="hintHolder temporaryOpacity" id="hintHolder">
+        <header class="header">
+            <div class="hintHolder temporaryOpacity" id="hintHolder" role="alert">
                 <span class="hintText" id="hintText">Hints over here!</span>
             </div>
-            <div class="characterDisplay">
-                <span class="characterDisplayText" id="characterDisplay">....</span>
-            </div>            
-            <div class="scoreHolder">
+            <div class="characterDisplay" role="status">
+                <span class="characterDisplayText" id="characterDisplay">-data here-</span>
+            </div>
+            <div class="scoreHolder" aria-live="polite">
                 <span class="score" id="score">0</span>
                 <span class="unlockedPercentage" id="unlockedPercentage">(0%)</span>
             </div>
-        </div>
-        <div class="timerBar" id="timer"></div>
+        </header>
+        <div class="timerBar" id="timer" aria-label="Timer"></div>
         <div class="swipeGradient" id="swiper"></div>
-        <div class="gameGrid" id="gameGrid"></div>
-    </div>
+        <main class="borderBack">
+            <div class="gameGrid" id="gameGrid" role="grid" aria-labelledby="characterDisplay"></div>
+        </main>
     <div id="overlay"></div>
-    <div class="instructions" id="instructions">
+    <div class="instructions" id="instructions" role="dialog" aria-labelledby="instructionsText">
         <div id="instructionsText">
-        <h1>DWDS Onboarding</h1>
-        <p>Congratulations on starting your new career with DWDS! <br> Match the parsed data from the top bar with the input data to store it correctly. <br>
-            Set the pace of your work in the bottom right. <br> If you need a hint during the current round, check out the top left!<br> Reach 100% completion to finish your work for the day! <br> Good luck!
-        </p></div>
+            <h1>DWDS Onboarding</h1>
+            <p>Congratulations on starting your new career with DWDS! <br> Match the parsed data from the top bar with the input data to store it correctly. The longer you work, the more our advanced AI will calibrate the display to your biometrics, making the correct data stand out more. <br>
+                Set the pace of your work in the bottom right. <br> If you need a hint during the current round, check out the top left!<br> Reach 100% completion to finish your work for the day! <br> Good luck!
+            </p>
+        </div>
         <button id="startGame" class="characterDisplay"><span class="characterDisplayText" id="startButtonText">Clock In</span></button>
     </div>
-    
     <div class="timescale-control temporaryOpacity" id="timescaleControl">
         <label for="timescaleSelect">Work Pace: </label>
-        <select id="timescaleSelect">
-            <option value="2">Ponderous (0.5x)</option>
+        <select id="timescaleSelect" aria-label="Work Pace">
+            <option value="8">Serene (0.125x)</option>
+            <option value="4">Leisurely (0.25x)</option>
+            <option value="2">Methodical (0.5x)</option>
             <option value="1" selected>Typical (1x)</option>
             <option value="0.5">Hectic (2x)</option>
+            <option value="0.25">Extreme (4x)</option>
         </select>
     </div>
-    
-</body>
 
+    <button id="fullscreenButton">Enter Fullscreen</button>
+</body>
 </html>
