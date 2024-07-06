@@ -4,7 +4,6 @@ function assert(condition, message) {
     }
 }
 
-// Helper function to normalize CSS transition property for comparison
 function normalizeTransition(transition) {
     return transition.split(',').map(part => {
         return part.trim().replace(/ 0s ease 0s| 0s ease| 0s/, '');
@@ -58,11 +57,9 @@ async function runTests() {
                 resetTestState();
                 const duration = 10;
                 await Game.startTimer(duration);
-                await new Promise(resolve => setTimeout(resolve, 50)); // Small delay to allow the transition to be applied
+                await new Promise(resolve => setTimeout(resolve, 50)); 
                 console.log('startTimer test - transition:', timerBar.style.transition);
                 const expectedTransition = `width ${duration}s linear`;
-
-                // Normalize and compare transitions
                 const actualTransition = normalizeTransition(timerBar.style.transition);
                 assert(actualTransition === expectedTransition, `Expected: ${expectedTransition}, but got: ${actualTransition}`);
             }
@@ -72,13 +69,11 @@ async function runTests() {
             fn: async () => {
                 resetTestState();
                 await Game.endRoundEarly();
-                await new Promise(resolve => setTimeout(resolve, 50)); // Small delay to allow the transition to be applied
+                await new Promise(resolve => setTimeout(resolve, 50)); 
                 console.log('endRoundEarly test - timer transition:', timerBar.style.transition);
                 console.log('endRoundEarly test - swiper transition:', swiper.style.transition);
                 const expectedTimerTransition = 'width 1s linear';
                 const expectedSwiperTransition = 'left 1s linear';
-
-                // Normalize and compare transitions
                 const actualTimerTransition = normalizeTransition(timerBar.style.transition);
                 const actualSwiperTransition = normalizeTransition(swiper.style.transition);
                 assert(actualTimerTransition === expectedTimerTransition, `Expected: ${expectedTimerTransition}, but got: ${actualTimerTransition}`);

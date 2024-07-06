@@ -1,4 +1,5 @@
 :root {
+    --timescale: 1;
     --main-bg-color: #000000fe;
     --secondary-bg-color: #111111fe;
     --tertiary-bg-color: #121212fe;
@@ -9,40 +10,146 @@
     --highlight-color: #f2f2f2f0;
     --font-main: "Noto Sans Display", sans-serif;
     --font-alt: "Noto Sans Linear A", sans-serif;
-    --transition-duration: 0.3s;
+    --transition-duration: calc(0.3s*var(--timescale));
     --border-width: 5px;
-    --correct-color: #32CD32;
-    --incorrect-color: #FF4500;
-    --pulse-duration: 0.25s;
-    --round-duration: 10s;
+    --correct-color: #0ebaa0d6;
+    --incorrect-color: #de113ad6;
+    --pulse-duration: calc(0.5s*var(--timescale));
+    --round-duration: calc(10s*var(--timescale));
+    --rotate-magnitude: 20deg;
+    --horizontal-magnitude: 15%;
+    --vertical-magnitude: 15%;
+    --pulse-magnitude: 0.1;
+    --animation-multiplier: 1;
+    --base-font-color: #eeeeeebb;
+    --chosen-font-color: #f2f2f2dd;
+    --grid-cell-pulse-time: 2s;
+    --cell-transparent-percent: 20%;
 }
 
 html,
 body {
-    height: 100%;
-    margin: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    user-select: none;
     background-color: var(--main-bg-color);
     background: radial-gradient(var(--main-bg-color), var(--secondary-bg-color), var(--tertiary-bg-color), var(--quaternary-bg-color), var(--main-bg-color));
     background-attachment: fixed;
-    overflow: hidden;
-    user-select: none;
+}
+
+.instructions {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--secondary-bg-color);
+    padding: 20px;
+    border: 1px solid var(--border-back-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    z-index: 1003;
+    color: var(--text-color);
+    font-family: var(--font-main);
+    text-align: center;
+}
+
+.instructions p {
+    font-size: 1.5em;
+    margin: 5% 10% 10% 5%;
+}
+
+.instructions h1 {
+    margin-top: 0;
+    font-size: 2em;
+    color: var(--highlight-color);
+}
+
+.instructions button {
+    background: none;
+    position: relative;
+    border: none;
+    cursor: pointer;
+}
+
+.instructions .characterDisplay {
+    transition: transform var(--transition-duration);
+    transform: scale(1);
+}
+
+.instructions .characterDisplay:hover {
+    transform: scale(1.1);
+}
+
+
+
+.instructions .characterDisplay::before {
+    box-shadow: 0 0 10px rgba(178, 178, 178, 0.5);
+    transition: box-shadow var(--transition-duration);
+}
+
+.instructions .characterDisplay:hover:before {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.776);
+}
+
+.instructions .characterDisplay:active {
+    transform: scale(0.9);
+}
+
+
+
+.timescale-control {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1003;
+    opacity: 0.05;
+    font-family: var(--font-main);
+    color: var(--text-color);
+    transition: opacity var(--transition-duration), transform var(--transition-duration);
+}
+
+.timescale-control:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+
+.timescale-control select {
+    background-color: var(--secondary-bg-color);
+    border: 1px solid var(--border-back-color);
+    color: var(--text-color);
+    padding: 5px;
+    border-radius: 5px;
+    transition: border-color var(--transition-duration), background-color var(--transition-duration);
+    font-family: var(--font-main);
+}
+
+.timescale-control select:hover {
+    border-color: var(--border-back-gradient-color);
+    background-color: var(--main-bg-color);
 }
 
 .borderBack {
-    width: calc(100vw - 10px);
-    height: calc(100vh - 10px);
-    margin: 5px;
-    background: radial-gradient(var(--border-back-color) 95%, var(--border-back-gradient-color) 97%);
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative;
+    margin: 5px;
+    background: radial-gradient(var(--border-back-color) 95%, var(--border-back-gradient-color) 97%);
     border: var(--border-width) solid var(--border-back-color);
     box-sizing: border-box;
+    width: calc(100vw - 10px);
+    height: calc(100vh - 10px);
 }
 
 .borderBack::before {
@@ -53,7 +160,7 @@ body {
     width: 100%;
     height: 100%;
     background: linear-gradient(-60deg, #222222dd, #2f2f2fcc, #333333cc);
-    animation: hueRotate 60s linear infinite;
+    animation: hueRotate calc(60s*var(--timescale)) linear infinite;
     z-index: 1;
     box-sizing: border-box;
 }
@@ -66,35 +173,20 @@ body {
     background-image: linear-gradient(to left, transparent 10%, #00000011 40%, #c2c2c288 45%, #e2e2e299 50%, transparent 55%);
     background-repeat: no-repeat;
     background-size: 200%;
-    left: -300%;
-    z-index: 999991000;
+    left: -110%;
+    z-index: 1000;
     pointer-events: none;
-    transition: left 1s linear;
+    transition: left calc(1s*var(--timescale)) linear;
+    will-change: left;
 }
 
-.swipeActivator {
-    animation: wipeAppear 1s linear infinite;
-}
 
 @keyframes hueRotate {
-    from {
-        filter: hue-rotate(0deg);
-    }
-
     to {
         filter: hue-rotate(360deg);
     }
 }
 
-@keyframes wipeAppear {
-    0% {
-        left: -100%;
-    }
-
-    100% {
-        left: 0%;
-    }
-}
 
 .timerBar {
     position: absolute;
@@ -107,6 +199,7 @@ body {
     z-index: 20;
     animation: hueRotate var(--round-duration) linear infinite;
     transition: width var(--round-duration) linear;
+    will-change: width;
 }
 
 
@@ -119,10 +212,9 @@ body {
     position: absolute;
     top: 1vh;
     z-index: 1;
-    pointer-events: none;
 }
 
-.startButton {
+.characterDisplay {
     width: calc(25vw + 5vh);
     height: calc(7vh + 7vw);
     padding: 1%;
@@ -133,20 +225,25 @@ body {
     align-items: center;
     justify-content: center;
     font-family: var(--font-main);
-    z-index: 599;
+    z-index: 100;
+    transition: transform var(--transition-duration) ease-in-out;
 }
 
-.startButton::before {
+.characterDisplay:hover {
+    transform: scale(0.95);
+}
+
+.characterDisplay::before {
     content: "";
     position: absolute;
     width: calc(25vw + 10vh);
     height: calc(3.5vh + 4vw);
     border-radius: 25px;
     background: linear-gradient(-65deg, #1e070777, #101210bb, #042010bb, #11115377);
-    animation: hueRotate 6s linear infinite;
+    animation: hueRotate calc(6s*var(--timescale)) linear infinite;
 }
 
-.startText {
+.characterDisplayText {
     background-image: linear-gradient(-35deg, #00dbb3, #2e6173, #550055, #b11867, #df9744, #03b93b, #00dbb3);
     background-size: 1000%;
     background-clip: text;
@@ -154,7 +251,12 @@ body {
     color: transparent;
     -webkit-text-fill-color: transparent;
     text-shadow: -2px -4px 8px #ffffff21;
-    animation: horizontalGradient 600s linear infinite, textRotate 6s linear infinite;
+    animation: horizontalGradient calc(600s*var(--timescale)) linear infinite, textRotate calc(6s*var(--timescale)) linear infinite;
+    transition: font-size calc(var(--transition-duration)*0.75) ease-in-out;
+}
+
+.header .characterDisplay:hover .characterDisplayText{
+    font-size: 9vh;
 }
 
 @keyframes textRotate {
@@ -198,11 +300,87 @@ body {
     box-sizing: border-box;
 }
 
+
+.particle-line {
+    position: absolute;
+    background-color: #fff;
+    pointer-events: none;
+    border-radius: 2px;
+    z-index: 9999;
+    transform-origin: center;
+    box-shadow: 0 0 2px rgba(58, 58, 58, 0.5);
+    animation: particleFade 1s ease-out forwards, hueRotate 2.5s linear forwards;
+}
+
+@keyframes particleFade {
+    100% {
+        opacity: 0;
+        width: 0;
+    }
+}
+
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+
+    80% {
+        opacity: 0.1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 0.95;
+    }
+
+    5%,
+    15% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.25;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(209, 186, 186, 0.4);
+    z-index: 1001;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.fade-in {
+    animation: fadeIn calc(2s * var(--timescale)) ease-in forwards, hueRotate calc(0.5s * var(--timescale)) linear forwards infinite;
+}
+
+.fade-out {
+    animation: fadeOut calc(1s*var(--timescale)) ease-out forwards, hueRotate calc(0.5s*var(--timescale)) linear forwards infinite;
+}
+
+
 .gridCell {
-    background: #aaaaaa05;
+    background: radial-gradient(circle, #aaaaaa05 var(--cell-transparent-percent), transparent 100%);
     border-radius: 10px;
     border: 1px #11111111 solid;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     font-size: calc(1.5vw + 1.5vh);
@@ -210,13 +388,30 @@ body {
     text-align: center;
     transform: scale(0.95);
     font-family: var(--font-alt);
-    transition: transform var(--transition-duration);
+    transition: transform var(--transition-duration) ease-out, background var(--transition-duration) ease-in-out;
+    z-index: 0;
 }
 
+.gridCell.in-use {
+    display: flex;
+    pointer-events: auto;
+}
+
+.gridCell.not-in-use {
+    pointer-events: none;
+    animation: none;
+}
+
+
 .gridCell:hover {
-    background: #bbbbbb99;
+    background: radial-gradient(circle, #bbbbbb6b var(--cell-transparent-percent), transparent 100%);
     transform: scale(1.025);
     cursor: pointer;
+}
+
+.gridCell.chosen:hover {
+    background: radial-gradient(circle, #cecece73 var(--cell-transparent-percent), transparent 100%);
+    transform: scale(1.045);
 }
 
 .gridCell:active {
@@ -231,11 +426,33 @@ body {
     justify-content: center;
     text-align: center;
     user-select: none;
-    text-shadow: 2px 2px 2px #111111ee;
-    position: relative;
+    color: var(--base-font-color);
+    text-shadow: 0px 0px 5px #111111ee;
+    position: absolute;
+    z-index: 10;
+    will-change: transform, top, right;
+    transition: text-shadow calc(0.5 * var(--transition-duration));
 }
 
-@keyframes wiggle {
+.gridCell.gridChar {
+    z-index: 20;
+    position: absolute;
+}
+
+.gridCell:hover .gridChar {
+    z-index: 20;
+    text-shadow: 0px 0px 10px #080808;
+}
+.gridCell.correct .gridChar, .gridCell.incorrect .gridChar {
+    text-shadow: 0px 0px 5px #080808;
+}
+
+.chosen .gridChar {
+    color: var(--chosen-font-color);
+}
+
+
+@keyframes rotateCharacter {
 
     0%,
     25%,
@@ -245,51 +462,15 @@ body {
     }
 
     50% {
-        transform: rotate(-20deg);
+        transform: rotate(calc(var(--rotate-magnitude) * var(--animation-multiplier) * -1));
     }
 
     37.5% {
-        transform: rotate(20deg);
+        transform: rotate(calc(var(--rotate-magnitude) * var(--animation-multiplier)));
     }
 }
 
-@keyframes pulse {
-
-    0%,
-    25%,
-    62.5%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(0.9);
-    }
-
-    37.5% {
-        transform: scale(1.1);
-    }
-}
-
-@keyframes vert {
-
-    0%,
-    25%,
-    62.5%,
-    100% {
-        top: 0%;
-    }
-
-    50% {
-        top: -15%;
-    }
-
-    37.5% {
-        top: 15%;
-    }
-}
-
-@keyframes hori {
+@keyframes horizontalCharacterMovement {
 
     0%,
     25%,
@@ -299,30 +480,71 @@ body {
     }
 
     50% {
-        right: -15%;
+        right: calc(var(--horizontal-magnitude) * var(--animation-multiplier));
     }
 
     37.5% {
-        right: 15%;
+        right: calc(var(--horizontal-magnitude) * var(--animation-multiplier) * -1);
     }
 }
 
-.correct {
-    background: var(--correct-color);
-    pointer-events: none;
-    animation: scorePulseUp var(--pulse-duration) ease-in-out;
+@keyframes verticalCharacterMovement {
+
+    0%,
+    25%,
+    62.5%,
+    100% {
+        top: 0%;
+    }
+
+    50% {
+        top: calc(var(--vertical-magnitude) * var(--animation-multiplier));
+    }
+
+    37.5% {
+        top: calc(var(--vertical-magnitude) * var(--animation-multiplier) * -1);
+    }
 }
 
-.incorrect {
-    background: var(--incorrect-color);
-    pointer-events: none;
-    animation: scorePulseDown var(--pulse-duration) ease-in-out;
+@keyframes pulseCharacter {
+
+    0%,
+    25%,
+    62.5%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(calc(1 + var(--pulse-magnitude) * var(--animation-multiplier) * -1));
+    }
+
+    37.5% {
+        transform: scale(calc(1 + var(--pulse-magnitude) * var(--animation-multiplier)));
+    }
 }
 
-.answerNumberHolder {
+
+.gridCell.correct {
+    background: radial-gradient(circle, var(--correct-color) var(--cell-transparent-percent), transparent 100%); 
+    z-index: -10 !important;
+    pointer-events: none;
+    animation: gridPulseUp var(--pulse-duration) ease-in-out 0s, organicPulse var(--grid-cell-pulse-time) ease-in-out infinite var(--pulse-duration);
+
+}
+
+.gridCell.incorrect {
+    background: radial-gradient(circle, var(--incorrect-color) var(--cell-transparent-percent), transparent 100%); 
+    z-index: -10 !important;
+    pointer-events: none;
+    animation: gridPulseDown var(--pulse-duration) ease-in-out 0s, organicPulse var(--grid-cell-pulse-time) ease-in-out infinite var(--pulse-duration);
+
+}
+
+.hintHolder {
     font-size: 2.5vh;
     color: white;
-    opacity: 0.5;
+    opacity: 0.05;
     z-index: 4;
     background: linear-gradient(#11111144, #00000066);
     border-radius: 25px;
@@ -330,21 +552,15 @@ body {
     font-family: var(--font-main);
     padding: 1vh;
     margin-left: 2vw;
-    animation: fadeIn var(--round-duration) ease infinite;
+    transition: opacity calc(2 * var(--transition-duration)), transform calc(2 * var(--transition-duration));
+    transform: scale(1);
 }
 
-@keyframes fadeIn {
-
-    0%,
-    30% {
-        opacity: 0.5;
-    }
-
-    65%,
-    100% {
-        opacity: 1;
-    }
+.hintHolder:hover {
+    opacity: 1;
+    transform: scale(1.1);
 }
+
 
 .scoreHolder {
     font-size: 4.5vh;
@@ -356,6 +572,11 @@ body {
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+    transition: transform var(--transition-duration) ease-in-out;
+}
+
+.scoreHolder:hover {
+    transform: scale(1.2);
 }
 
 .score {
@@ -368,10 +589,15 @@ body {
 
 .unlockedPercentage {
     font-size: 30%;
+    transition: font-size var(--transition-duration) ease-in-out;
+}
+
+.scoreHolder:hover .unlockedPercentage {
+    font-size: 50%;
 }
 
 @media (max-width: 768px) {
-    .startButton {
+    .characterDisplayText {
         font-size: 4vh;
     }
 
@@ -379,7 +605,7 @@ body {
         font-size: calc(1.5vw + 1.5vh);
     }
 
-    .answerNumberHolder,
+    .hintHolder,
     .scoreHolder {
         font-size: 2vh;
         padding: 0.5vh;
@@ -396,7 +622,7 @@ body {
 }
 
 @media (max-width: 480px) {
-    .startButton {
+    .characterDisplayText {
         font-size: 3vh;
     }
 
@@ -404,7 +630,7 @@ body {
         font-size: calc(1.5vw + 1.5vh);
     }
 
-    .answerNumberHolder,
+    .hintHolder,
     .scoreHolder {
         font-size: 1.5vh;
         padding: 0.5vh;
@@ -417,6 +643,85 @@ body {
     .gameGrid {
         grid-template-rows: repeat(var(--grid-rows, 12), 1fr);
         grid-template-columns: repeat(var(--grid-cols, 10), 1fr);
+    }
+}
+@keyframes gridPulseUp {
+    0% {
+        transform: scale(1);
+        color: white;
+        border-radius: 50%;
+    }
+
+    20% {
+        transform: scale(1.35) scaleY(1.08) skew(4deg);
+        color: var(--correct-color);
+        border-radius: 58% 42% 53% 47% / 50% 57% 43% 50%;
+    }
+
+    35% {
+        transform: scale(1.42) scaleY(0.85) skew(-2deg);
+        border-radius: 40% 60% 50% 50% / 43% 50% 57% 57%;
+    }
+
+    50% {
+        transform: scale(1.25) scaleY(0.92) rotate(2deg);
+        border-radius: 53% 47% 43% 57% / 47% 53% 50% 50%;
+    }
+
+    75% {
+        transform: scale(1.08) scaleY(1.04) rotate(-1deg);
+        border-radius: 47% 53% 50% 50% / 53% 47% 57% 43%;
+    }
+
+    90% {
+        transform: scale(0.96) scaleY(1.015) skew(1deg);
+        border-radius: 50% 50% 47% 53% / 50% 50% 47% 53%;
+    }
+
+    100% {
+        transform: scale(1);
+        color: white;
+        border-radius: 50%;
+    }
+}
+
+@keyframes gridPulseDown {
+    0% {
+        transform: scale(1);
+        color: white;
+        border-radius: 50%;
+    }
+
+    20% {
+        transform: scale(1.08) scaleY(1.35) skew(-4deg);
+        color: var(--incorrect-color);
+        border-radius: 43% 57% 50% 50% / 57% 43% 53% 47%;
+    }
+
+    35% {
+        transform: scale(1.25) scaleY(0.85) skew(2deg);
+        border-radius: 60% 40% 47% 53% / 50% 57% 43% 50%;
+    }
+
+    50% {
+        transform: scale(0.85) scaleY(1.15) rotate(-2deg);
+        border-radius: 53% 47% 57% 43% / 43% 50% 57% 50%;
+    }
+
+    75% {
+        transform: scale(0.92) scaleY(1.04) rotate(1deg);
+        border-radius: 50% 50% 43% 57% / 53% 47% 50% 50%;
+    }
+
+    90% {
+        transform: scale(0.96) scaleY(1.015) skew(-1deg);
+        border-radius: 47% 53% 50% 50% / 50% 50% 53% 47%;
+    }
+
+    100% {
+        transform: scale(1);
+        color: white;
+        border-radius: 50%;
     }
 }
 
@@ -484,4 +789,9 @@ body {
 
 .pulse-down {
     animation: scorePulseDown var(--pulse-duration) ease-in-out 0.2s;
+}
+
+.temporaryOpacity {
+    opacity: 1 !important;
+    z-index: 99999 !important;
 }

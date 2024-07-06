@@ -1,28 +1,27 @@
-<!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Work Simulator 3000</title>
+    <title>Work Simulator 2089</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@100&family=Noto+Sans+Linear+A&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@100&family=Noto+Sans+Linear+A&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="utils.js"></script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
     <div class="borderBack">
         <div class="header">
-            <div class="answerNumberHolder">
-                <span class="answerNumber" id="answerNumber">0</span>
+            <div class="hintHolder temporaryOpacity" id="hintHolder">
+                <span class="hintText" id="hintText">Hints over here!</span>
             </div>
-            <div class="startButton">
-                <span class="startText" id="start">MATCH</span>
-            </div>
+            <div class="characterDisplay">
+                <span class="characterDisplayText" id="characterDisplay">....</span>
+            </div>            
             <div class="scoreHolder">
                 <span class="score" id="score">0</span>
                 <span class="unlockedPercentage" id="unlockedPercentage">(0%)</span>
@@ -32,7 +31,25 @@
         <div class="swipeGradient" id="swiper"></div>
         <div class="gameGrid" id="gameGrid"></div>
     </div>
-    <script src="script.js"></script>
+    <div id="overlay"></div>
+    <div class="instructions" id="instructions">
+        <div id="instructionsText">
+        <h1>DWDS Onboarding</h1>
+        <p>Congratulations on starting your new career with DWDS! <br> Match the parsed data from the top bar with the input data to store it correctly. <br>
+            Set the pace of your work in the bottom right. <br> If you need a hint during the current round, check out the top left!<br> Reach 100% completion to finish your work for the day! <br> Good luck!
+        </p></div>
+        <button id="startGame" class="characterDisplay"><span class="characterDisplayText" id="startButtonText">Clock In</span></button>
+    </div>
+    
+    <div class="timescale-control temporaryOpacity" id="timescaleControl">
+        <label for="timescaleSelect">Work Pace: </label>
+        <select id="timescaleSelect">
+            <option value="2">Ponderous (0.5x)</option>
+            <option value="1" selected>Typical (1x)</option>
+            <option value="0.5">Hectic (2x)</option>
+        </select>
+    </div>
+    
 </body>
 
 </html>
