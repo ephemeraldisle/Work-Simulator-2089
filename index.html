@@ -1,57 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
     <title>Work Simulator 2089</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@100&family=Noto+Sans+Linear+A&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+Display:wght@100&family=Noto+Sans+Linear+A&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <script src="utils.js"></script>
-    <script src="script.js" defer></script>
 </head>
+
 <body>
+    <main class="game-container" aria-label="Work Simulator 2089 Game Area">
         <header class="header">
-            <div class="hintHolder temporaryOpacity" id="hintHolder" role="alert">
-                <span class="hintText" id="hintText">Hints over here!</span>
+            <div id="hint-holder" class="hint-holder" role="status" aria-live="polite" tabindex="0">
+                <span id="hint-text" class="hint-text">Hints will appear here</span>
             </div>
-            <div class="characterDisplay" role="status">
-                <span class="characterDisplayText" id="characterDisplay">-data here-</span>
+            <div id="character-display" class="character-display" role="status" aria-live="polite" tabindex="0">
+                <span id="character-display-text" class="character-display-text"
+                    aria-label="Current characters to match">-data here-</span>
             </div>
-            <div class="scoreHolder" aria-live="polite">
-                <span class="score" id="score">0</span>
-                <span class="unlockedPercentage" id="unlockedPercentage">(0%)</span>
+            <div id="score-holder" class="score-holder" role="status" aria-live="polite" tabindex="0">
+                <span id="score" class="score" aria-label="Current score">0</span>
+                <span id="unlocked-percentage" class="unlocked-percentage"
+                    aria-label="Percentage of data unlocked">(0%)</span>
             </div>
         </header>
-        <div class="timerBar" id="timer" aria-label="Timer"></div>
-        <div class="swipeGradient" id="swiper"></div>
-        <main class="borderBack">
-            <div class="gameGrid" id="gameGrid" role="grid" aria-labelledby="characterDisplay"></div>
-        </main>
-    <div id="overlay"></div>
-    <div class="instructions" id="instructions" role="dialog" aria-labelledby="instructionsText">
-        <div id="instructionsText">
-            <h1>DWDS Onboarding</h1>
-            <p>Congratulations on starting your new career with DWDS! <br> Match the parsed data from the top bar with the input data to store it correctly. The longer you work, the more our advanced AI will calibrate the display to your biometrics, making the correct data stand out more. <br>
-                Set the pace of your work in the bottom right. <br> If you need a hint during the current round, check out the top left!<br> Reach 100% completion to finish your work for the day! <br> Good luck!
-            </p>
-        </div>
-        <button id="startGame" class="characterDisplay"><span class="characterDisplayText" id="startButtonText">Clock In</span></button>
-    </div>
-    <div class="timescale-control temporaryOpacity" id="timescaleControl">
-        <label for="timescaleSelect">Work Pace: </label>
-        <select id="timescaleSelect" aria-label="Work Pace">
-            <option value="8">Serene (0.125x)</option>
-            <option value="4">Leisurely (0.25x)</option>
-            <option value="2">Methodical (0.5x)</option>
-            <option value="1" selected>Typical (1x)</option>
-            <option value="0.5">Hectic (2x)</option>
-            <option value="0.25">Extreme (4x)</option>
-        </select>
-    </div>
 
-    <button id="fullscreenButton">Enter Fullscreen</button>
+        <div id="timer" class="timer-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+            aria-label="Round timer"></div>
+        <div id="swiper" class="swipe-gradient" aria-hidden="true"></div>
+
+        <section id="game-grid" class="game-grid" role="grid" aria-label="Game grid">
+            <!-- Grid cells will be dynamically inserted here -->
+        </section>
+
+        <div id="overlay" class="overlay" aria-hidden="true"></div>
+
+        <aside id="instructions" class="instructions" role="dialog" aria-labelledby="instructions-title"
+            aria-describedby="instructions-text">
+            <h1 id="instructions-title">DWDS Onboarding</h1>
+            <div id="instructions-text">
+                <p>Congratulations on starting your new career with DWDS!</p>
+                <p>Match the parsed data from the top bar with the input data to store it correctly. The longer you
+                    work, the more our advanced AI will calibrate the display to your biometrics, making the correct
+                    data stand out more.</p>
+                <p>Set the pace of your work in the bottom right. If you need a hint during the current round, check out
+                    the top left!</p>
+                <p>Reach 100% completion to finish your work for the day!</p>
+                <p>Good luck!</p>
+            </div>
+            <button id="start-game" class="character-display" aria-label="Start the game" tabindex="0">
+                <span id="start-button-text" class="character-display-text">Clock In</span>
+            </button>
+        </aside>
+
+        <div id="timescale-control" class="timescale-control">
+            <label for="timescale-select">Work Pace: </label>
+            <div class="custom-select">
+                <select id="timescale-select" aria-label="Select work pace">
+                    <option value="8">Serene (0.125x)</option>
+                    <option value="4">Leisurely (0.25x)</option>
+                    <option value="2">Methodical (0.5x)</option>
+                    <option value="1" selected>Typical (1x)</option>
+                    <option value="0.5">Hectic (2x)</option>
+                    <option value="0.25">Extreme (4x)</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="fullscreen-button" aria-label="Toggle fullscreen mode" tabindex="0">
+            <span class="fullscreen-icon" id="fullscreen-icon">Better in Fullscreen! ⛶</span>
+            <span class="exit-fullscreen-icon" style="display: none;">⤢</span>
+        </button>
+    </main>
+
+    <div id="accessibility-announcer" class="visually-hidden" aria-live="assertive" role="status"></div>
 </body>
+<script type="module" src="script.js"></script>
+
 </html>
