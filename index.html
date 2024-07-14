@@ -24,7 +24,9 @@
                     aria-label="Current characters to match">-data here-</span>
             </div>
             <div id="score-holder" class="score-holder" role="status" aria-live="polite" tabindex="0">
-                <span id="score" class="score" aria-label="Current score">0</span>
+                <div class="score-bubble">
+                    <span id="score" class="score" aria-label="Current score">0</span>
+                </div>
                 <span id="unlocked-percentage" class="unlocked-percentage"
                     aria-label="Percentage of data unlocked">(0%)</span>
             </div>
@@ -73,10 +75,18 @@
         </div>
 
         <button id="fullscreen-button" aria-label="Toggle fullscreen mode" tabindex="0">
-            <span class="fullscreen-icon" id="fullscreen-icon">Better in Fullscreen! ⛶</span>
-            <span class="exit-fullscreen-icon" style="display: none;">⤢</span>
+            <span class="fullscreen-text">Better in Fullscreen!</span>
+            <span class="fullscreen-icon" id="fullscreen-icon">⛶</span>
+            <span class="exit-fullscreen-icon">⤢</span>
         </button>
     </main>
+    <div id="small-screen-message" class="small-screen-message">
+        <div class="message-content">
+            <h2>Oops</h2>
+            <p>This screen is too small. We require a minimum of 320 pixels in each dimension to function.</p>
+            <p>Please try rotating your device or using a device with a larger screen for the best experience.</p>
+        </div>
+    </div>
 
     <div id="accessibility-announcer" class="visually-hidden" aria-live="assertive" role="status"></div>
 </body>
