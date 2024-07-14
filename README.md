@@ -10,4 +10,5 @@ If so, have I got the experience for you.
 
 It won't help you understand Linear A, but it might inadvertantly teach you its characters.
 
-Play the deployment on github pages, or build it yourself, or just marvel at my beautiful code.
+Play the deployment here https://ephemeraldisle.github.io/Work-Simulator-2089/
+or build it yourself, or just marvel at my beautiful code.

@@ -1,0 +1,23 @@
+{
+    "extends": ["stylelint-config-standard"],
+    "plugins": ["stylelint-order"],
+    "rules": {
+      "order/order": [
+        "custom-properties",
+        "dollar-variables",
+        "at-rules",
+        "declarations",
+        {
+          "type": "at-rule",
+          "name": "supports"
+        },
+        {
+          "type": "at-rule",
+          "name": "media"
+        },
+        "rules"
+      ],
+      "order/properties-alphabetical-order": true
+    }
+  }
+  
