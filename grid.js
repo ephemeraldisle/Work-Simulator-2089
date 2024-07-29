@@ -79,7 +79,6 @@ export function populateGridCells(targetCharacters, characterPool, gameGrid) {
       matchingPicks++;
     }
 
-    // Force a reflow to ensure the character is displayed
     void cell.offsetWidth;
   });
 

@@ -29,7 +29,6 @@ export function initializeUI() {
     accessibilityAnnouncer: document.getElementById("accessibility-announcer"),
   };
 
-  // Validate that all elements were found
   for (const [key, value] of Object.entries(elements)) {
     if (!value) {
       console.warn(`Failed to find element: ${key}`);
@@ -76,7 +75,6 @@ export async function resetRoundElements() {
   elements.timerBar.style.transition = "none";
   elements.timerBar.style.width = "0%";
   fadeOutOverlay();
-  // Force a reflow
   void elements.timerBar.offsetWidth;
   void elements.swiper.offsetWidth;
 
@@ -100,7 +98,6 @@ export function setupSwiperTransition(duration) {
   elements.swiper.style.transition = "none";
   elements.swiper.style.left = "-110%";
 
-  // Force a reflow
   void elements.swiper.offsetWidth;
 
   swipeTimer = setTimeout(() => {
@@ -141,17 +138,17 @@ export function updateHintText(correctPicks, matchingPicks) {
   const remainingMatches = matchingPicks - correctPicks;
   if (remainingMatches === 0 && matchingPicks > 0) {
     elements.hintText.textContent = "All matches found!";
-    elements.accessibilityAnnouncer.textContent = "All matches found!"; // Announce via screen reader
-    return true; // Signal to end round early
+    elements.accessibilityAnnouncer.textContent = "All matches found!"; 
+    return true;
   } else if (remainingMatches === 1) {
     elements.hintText.textContent = "1 match remaining.";
-    elements.accessibilityAnnouncer.textContent = "1 match remaining."; // Announce via screen reader
+    elements.accessibilityAnnouncer.textContent = "1 match remaining."; 
   } else if (remainingMatches > 1) {
     elements.hintText.textContent = `${remainingMatches} matches remaining.`;
-    elements.accessibilityAnnouncer.textContent = `${remainingMatches} matches remaining.`; // Announce via screen reader
+    elements.accessibilityAnnouncer.textContent = `${remainingMatches} matches remaining.`; 
   } else {
     elements.hintText.textContent = "No matches this round.";
-    elements.accessibilityAnnouncer.textContent = "No matches this round."; // Announce via screen reader
+    elements.accessibilityAnnouncer.textContent = "No matches this round."; 
   }
   return false;
 }
@@ -159,7 +156,7 @@ export function updateHintText(correctPicks, matchingPicks) {
 export function updateScore(newScore, pulseClass) {
   elements.scoreElement.textContent = newScore;
   elements.scoreElement.classList.remove("pulse-up", "pulse-down");
-  void elements.scoreElement.offsetWidth; // Trigger reflow
+  void elements.scoreElement.offsetWidth;
   if (pulseClass) {
     elements.scoreElement.classList.add(pulseClass);
   }
@@ -310,7 +307,7 @@ export function setupTimescaleControl(handleTimescaleChange) {
   Array.from(timescaleSelect.options).forEach((option, index) => {
     const optionDiv = document.createElement("div");
     optionDiv.textContent = option.text;
-    optionDiv.tabIndex = -1; // Make options not focusable by default
+    optionDiv.tabIndex = -1;
     optionDiv.addEventListener("click", function (e) {
       updateSelectedOption(
         this,

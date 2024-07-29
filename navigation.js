@@ -11,7 +11,6 @@ function addArrowKeySupport(state, elements) {
         elements.timescaleControl.querySelector(".select-selected");
 
       if (timescaleSelected.classList.contains("select-arrow-active")) {
-        // Let the timescale control handle its own navigation when the menu is open
         return;
       }
 
@@ -45,7 +44,6 @@ function addArrowKeySupport(state, elements) {
           state
         );
       } else {
-        // If nothing is focused, focus on an appropriate element
         focusInitialElement(e.key, elements, state);
       }
     }

@@ -1,6 +1,4 @@
-/* Variables */
 :root {
-  /* Colors */
   --color-bg-primary: #000000fe;
   --color-bg-secondary: #111111fe;
   --color-bg-tertiary: #121212fe;
@@ -13,11 +11,9 @@
   --color-incorrect: #de113ad6;
   --color-focus: #edaa06;
 
-  /* Fonts */
   --font-primary: "Noto Sans Display", sans-serif;
   --font-secondary: "Noto Sans Linear A", sans-serif;
 
-  /* Sizes and Durations */
   --border-width: 5px;
   --transition-duration: 0.3s;
   --pulse-duration: 0.5s;
@@ -25,7 +21,6 @@
   --cell-transparent-percent: 20%;
   --score-base-size: clamp(1.5rem, 5vh, 4rem);
 
-  /* Game Specific */
   --timescale: 1;
   --round-duration: calc(10s * var(--timescale));
   --rotate-magnitude: 20deg;
@@ -35,7 +30,6 @@
   --animation-multiplier: 1;
 }
 
-/* Base Styles */
 body,
 html {
   height: 100vh;

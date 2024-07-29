@@ -109,7 +109,7 @@ class Game {
     UI.startTimerAnimation(duration);
     UI.setupSwiperTransition(duration);
 
-    this.roundStartTime = Date.now(); // Track the round start time
+    this.roundStartTime = Date.now();
     this.roundTimer = setTimeout(() => this.endRound(), duration * 1000);
   }
 
@@ -175,7 +175,6 @@ class Game {
 
     UI.createParticles(x, y, isCorrect);
 
-    // Temporarily hide focus visuals
     cell.classList.add("hide-focus-visuals");
   }
 
